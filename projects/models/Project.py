@@ -1,6 +1,6 @@
 from django.db import models
 from users.models import User
-import Category
+from projects.models import Category
 
 class Project(models.Model):
     STATUS_CHOICES = [

@@ -8,8 +8,8 @@ class Update(models.Model):
     id = models.AutoField(primary_key=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='updates')
     title = models.CharField(max_length=255)
-    content = models.TextField(null=True, blank=True)  # Using TextField for larger content
-    date = models.DateTimeField(default=timezone.now, auto_now=True)
+    content = models.TextField(null=True, blank=True)
+    date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         db_table = 'update'

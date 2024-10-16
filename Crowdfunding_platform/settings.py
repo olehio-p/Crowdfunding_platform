@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "locations.apps.LocationsConfig",
     "languages.apps.LanguagesConfig",
-    "projects.apps.ProjectsConfig"
+    "projects.apps.ProjectsConfig",
+    "transactions.apps.TransactionsConfig"
 ]
 
 MIDDLEWARE = [

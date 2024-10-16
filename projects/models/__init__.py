@@ -1,2 +1,3 @@
-from projects.models import Project
-from projects.models import Category
+from .Category import Category
+from .Project import Project
+from .Milestone import Milestone

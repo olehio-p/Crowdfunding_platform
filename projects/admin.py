@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from projects.models import Project, Category, Milestone
+from projects.models import Project, Category, Milestone, Update
 
-admin.register(Category, Project, Milestone)
+admin.register(Category, Project, Milestone, Update)

@@ -11,7 +11,7 @@ class Reward(models.Model):
     limit = models.IntegerField(null=True, blank=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'reward'
         indexes = [
             models.Index(fields=['project']),

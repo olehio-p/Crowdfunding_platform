@@ -11,7 +11,7 @@ class RewardClaim(models.Model):
     is_fulfilled = models.BooleanField(default=False)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'reward_claim'
         unique_together = (('reward', 'user'),)
         indexes = [

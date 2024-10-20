@@ -18,7 +18,7 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'notification'
         indexes = [
             models.Index(fields=['user']),

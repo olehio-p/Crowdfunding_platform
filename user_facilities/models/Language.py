@@ -5,6 +5,6 @@ class Language(models.Model):
     name = models.CharField(max_length=100)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'language'
 

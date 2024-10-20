@@ -13,7 +13,7 @@ class Donation(models.Model):
     transaction = models.OneToOneField(Transaction, on_delete=models.RESTRICT, unique=True, related_name='donation')
 
     class Meta:
-            managed = False
+            managed = True
             db_table = 'donation'
             indexes = [
                 models.Index(fields=['user']),

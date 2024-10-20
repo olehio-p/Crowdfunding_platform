@@ -11,7 +11,7 @@ class Comment(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'comment'
         indexes = [
             models.Index(fields=['project']),

@@ -7,7 +7,7 @@ class Location(models.Model):
     postal_code = models.CharField(max_length=20, unique=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'location'
         indexes = [
             models.Index(fields=['country']),

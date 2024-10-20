@@ -28,7 +28,7 @@ class Transaction(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'transaction'
         indexes = [
             models.Index(fields=['user']),

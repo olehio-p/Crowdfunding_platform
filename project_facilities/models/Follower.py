@@ -11,7 +11,7 @@ class Follower(models.Model):
     follow_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'follower'
         unique_together = (('user', 'project'),)
         indexes = [

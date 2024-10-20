@@ -6,6 +6,6 @@ class Category(models.Model):
     description = models.CharField(max_length=1000, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'category'
 

@@ -11,7 +11,7 @@ class PaymentGateway(models.Model):
     transaction_fee = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'payment_gateway'
         indexes = [
             models.Index(fields=['transaction_fee']),

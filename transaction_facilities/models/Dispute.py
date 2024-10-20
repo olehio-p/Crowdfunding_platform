@@ -18,7 +18,7 @@ class Dispute(models.Model):
     resolution_date = models.DateTimeField(null=True, blank=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'dispute'
         indexes = [
             models.Index(fields=['transaction']),

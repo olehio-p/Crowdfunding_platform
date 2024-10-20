@@ -82,7 +82,7 @@ WSGI_APPLICATION = "Crowdfunding_platform.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'crowdfunding_platform_db',
+        'NAME': 'crowdfunding_platform_db_test',
         'USER': 'root',
         'PASSWORD': 'vsepBmx6',
         'HOST':'localhost',

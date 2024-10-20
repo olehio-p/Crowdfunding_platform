@@ -21,6 +21,6 @@ class CustomUser(models.Model):
     location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True, related_name='users')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'user'
 

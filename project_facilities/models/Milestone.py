@@ -11,5 +11,5 @@ class Milestone(models.Model):
     completion_date = models.DateField(null=True, blank=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'milestone'

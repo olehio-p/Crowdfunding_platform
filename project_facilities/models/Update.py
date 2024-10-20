@@ -11,7 +11,7 @@ class Update(models.Model):
     date = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'update'
         indexes = [
             models.Index(fields=['project']),

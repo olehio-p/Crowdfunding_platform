@@ -11,7 +11,7 @@ class Analytics(models.Model):
     created_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'analytics'
         indexes = [
             models.Index(fields=['total_views']),

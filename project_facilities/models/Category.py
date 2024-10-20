@@ -8,4 +8,3 @@ class Category(models.Model):
     class Meta:
         managed = True
         db_table = 'category'
-

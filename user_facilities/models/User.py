@@ -23,4 +23,3 @@ class CustomUser(models.Model):
     class Meta:
         managed = True
         db_table = 'user'
-

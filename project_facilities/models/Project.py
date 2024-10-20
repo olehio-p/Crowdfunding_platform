@@ -1,6 +1,6 @@
 from django.db import models
 
-from crowdfunding_platform.project_facilities.models.Category import Category
+from project_facilities.models.Category import Category
 
 
 class Project(models.Model):

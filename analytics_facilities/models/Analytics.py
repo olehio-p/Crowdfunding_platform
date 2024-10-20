@@ -1,6 +1,6 @@
 from django.db import models
 
-from crowdfunding_platform.project_facilities.models.Project import Project
+from project_facilities.models.Project import Project
 
 
 class Analytics(models.Model):

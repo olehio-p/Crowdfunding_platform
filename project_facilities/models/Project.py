@@ -1,7 +1,6 @@
 from django.db import models
-import Category
-from crowdfunding_platform.project_facilities.models.Follower import Follower
-from crowdfunding_platform.user_facilities.models.User import CustomUser
+
+from crowdfunding_platform.project_facilities.models.Category import Category
 
 
 class Project(models.Model):
@@ -12,7 +11,6 @@ class Project(models.Model):
         ('paused', 'Paused'),
     ]
 
-    followers = models.ManyToManyField(CustomUser, on_delete=models.CASCADE, related_name='projects', through=Follower)
     title = models.CharField(max_length=45)
     description = models.TextField(max_length=10000)
     goal_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)

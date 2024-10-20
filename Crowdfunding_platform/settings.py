@@ -55,7 +55,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "crowdfunding_platform.urls"
+ROOT_URLCONF = "Crowdfunding_platform.urls"
 
 TEMPLATES = [
     {
@@ -73,7 +73,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "crowdfunding_platform.wsgi.application"
+WSGI_APPLICATION = "Crowdfunding_platform.wsgi.application"
 
 
 # Database

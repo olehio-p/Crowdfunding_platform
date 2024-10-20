@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
-from crowdfunding_platform.transaction_facilities.models.Transaction import Transaction
-from crowdfunding_platform.user_facilities.models.User import CustomUser
+from transaction_facilities.models.Transaction import Transaction
+from user_facilities.models.User import CustomUser
 
 
 class Dispute(models.Model):

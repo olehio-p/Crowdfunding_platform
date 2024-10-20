@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from crowdfunding_platform.project_facilities.models.Project import Project
+from project_facilities.models.Project import Project
 
 
 class Update(models.Model):

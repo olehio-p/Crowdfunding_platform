@@ -1,9 +1,9 @@
 from django.db import models
 from django.utils import timezone
 
-from crowdfunding_platform.project_facilities.models.Project import Project
-from crowdfunding_platform.transaction_facilities.models.PaymentGateway import PaymentGateway
-from crowdfunding_platform.user_facilities.models.User import CustomUser
+from project_facilities.models.Project import Project
+from transaction_facilities.models.PaymentGateway import PaymentGateway
+from user_facilities.models.User import CustomUser
 
 
 class Transaction(models.Model):

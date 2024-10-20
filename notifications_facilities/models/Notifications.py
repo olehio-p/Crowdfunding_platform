@@ -1,7 +1,7 @@
 from django.db import models
 
-from crowdfunding_platform.project_facilities.models.Project import Project
-from crowdfunding_platform.user_facilities.models.User import CustomUser
+from project_facilities.models.Project import Project
+from user_facilities.models.User import CustomUser
 
 
 class Notification(models.Model):

@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from user_facilities.models import Language, Location
+
 
 class CustomUser(models.Model):
     USER_TYPE_CHOICES = [
@@ -15,8 +17,8 @@ class CustomUser(models.Model):
     user_type = models.CharField(max_length=7, choices=USER_TYPE_CHOICES, default=None, null=True, blank=True)
     join_date = models.DateField()
     phone_number = models.CharField(max_length=20, blank=True, null=True)
-    language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True, blank=True, related_name='users')
-    location = models.ForeignKey('Location', on_delete=models.SET_NULL, null=True, blank=True, related_name='users')
+    language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True, blank=True, related_name='users')
+    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True, related_name='users')
 
     class Meta:
         managed = False

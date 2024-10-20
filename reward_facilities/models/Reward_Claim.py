@@ -1,7 +1,7 @@
 from django.db import models
 
-from crowdfunding_platform.reward_facilities.models.Reward import Reward
-from crowdfunding_platform.user_facilities.models.User import CustomUser
+from reward_facilities.models.Reward import Reward
+from user_facilities.models.User import CustomUser
 
 
 class RewardClaim(models.Model):

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "Crowdfunding_platform",
     "drf_yasg",
+    "fapp.apps.FappConfig"
     # "rest_framework.authtoken",
 ]
 

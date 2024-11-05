@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Crowdfunding Platform{% endblock %}</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #f0f0f0;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header, footer {
+            background-color: #1e1e1e;
+            color: #00e5ff;
+            text-align: center;
+            padding: 1rem;
+            font-size: 1.2em;
+        }
+        nav a {
+            color: #00e5ff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0 15px;
+        }
+        nav a:hover {
+            color: #ff4081;
+        }
+        main {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #222;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #00e5ff;
+            font-size: 2em;
+            margin-bottom: 1em;
+        }
+        p, li {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        a {
+            color: #00e5ff;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #ff4081;
+        }
+        .button {
+            background: #00e5ff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #121212;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 5px;
+        }
+        .button:hover {
+            background: #ff4081;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{% url 'project_list' %}">Home</a>
+            <a href="{% url 'project_create' %}">Add New Project</a>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 Crowdfunding Platform - Futuristic Experience</p>
+    </footer>
+</body>
+</html>

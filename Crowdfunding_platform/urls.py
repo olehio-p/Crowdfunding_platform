@@ -7,6 +7,7 @@ from drf_yasg import openapi
 from rest_framework import permissions
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from Crowdfunding_platform import views
 from Crowdfunding_platform.views.auth_view import RegisterView, LoginView, LogoutView, UserDetailsView
 from Crowdfunding_platform.views.project_views.category_view import CategoryViewSet
 from Crowdfunding_platform.views.project_views.comment_view import CommentViewSet
@@ -63,4 +64,6 @@ urlpatterns = [
     path("login/", LoginView.as_view(), name="rest_login"),
     path("logout/", LogoutView.as_view(), name="rest_logout"),
     path("user/", UserDetailsView.as_view(), name="rest_user_details"),
+
+    path("projects/", include("fapp.urls")),
 ]

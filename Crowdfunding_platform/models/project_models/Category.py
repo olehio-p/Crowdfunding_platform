@@ -8,3 +8,6 @@ class Category(models.Model):
     class Meta:
         managed = True
         db_table = 'category'
+
+    def __str__(self):
+        return self.name

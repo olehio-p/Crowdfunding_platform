@@ -11,20 +11,12 @@ class LanguageViewSet(viewsets.ViewSet):
         super().__init__(**kwargs)
         self.unitOfWork = DjangoUnitOfWork()
 
-    @swagger_auto_schema(
-        operation_summary="Retrieve a list of all languages",
-        responses={200: LanguageSerializer(many=True)},
-    )
     def list(self, request):
         with self.unitOfWork:
             languages = self.unitOfWork.languages.get_all()
         serializer = LanguageSerializer(languages, many=True)
         return Response(serializer.data)
 
-    @swagger_auto_schema(
-        operation_summary="Retrieve a language by ID",
-        responses={200: LanguageSerializer, 404: "Language not found"},
-    )
     def retrieve(self, request, pk=None):
         with self.unitOfWork:
             language = self.unitOfWork.languages.get(pk)
@@ -33,11 +25,6 @@ class LanguageViewSet(viewsets.ViewSet):
         serializer = LanguageSerializer(language)
         return Response(serializer.data)
 
-    @swagger_auto_schema(
-        operation_summary="Create a new language",
-        request_body=LanguageSerializer,
-        responses={201: LanguageSerializer, 400: "Invalid data"},
-    )
     def create(self, request):
         serializer = LanguageSerializer(data=request.data)
         if serializer.is_valid():
@@ -49,11 +36,6 @@ class LanguageViewSet(viewsets.ViewSet):
             return Response(LanguageSerializer(language).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(
-        operation_summary="Update an existing language",
-        request_body=LanguageSerializer,
-        responses={200: LanguageSerializer, 404: "Language not found", 400: "Invalid data"},
-    )
     def update(self, request, pk=None):
         with self.unitOfWork:
             language = self.unitOfWork.languages.get(pk)
@@ -70,10 +52,6 @@ class LanguageViewSet(viewsets.ViewSet):
             return Response(LanguageSerializer(updated_language).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(
-        operation_summary="Delete a language by ID",
-        responses={204: "Language deleted successfully", 404: "Language not found"},
-    )
     def destroy(self, request, pk=None):
         with self.unitOfWork:
             if self.unitOfWork.languages.delete(pk):

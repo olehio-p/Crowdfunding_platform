@@ -35,34 +35,34 @@ class CustomUserViewSet(viewsets.ViewSet):
         serializer = CustomUserSerializer(user)
         return Response(serializer.data)
 
-    @swagger_auto_schema(
-        operation_summary="Create a new custom user",
-        request_body=CustomUserSerializer,
-        responses={201: CustomUserSerializer, 400: "Invalid data"}
-    )
-    def create(self, request):
-        serializer = CustomUserSerializer(data=request.data)
-        if serializer.is_valid():
-            with self.unitOfWork:
-                user_data = serializer.validated_data.get('user')
-                user = User.objects.create(
-                    username=user_data.get('username'),
-                    email=user_data.get('email'),
-                    first_name=user_data.get('first_name'),
-                    last_name=user_data.get('last_name')
-                )
-                custom_user = self.unitOfWork.custom_users.create(
-                    user=user,
-                    profile_picture=serializer.validated_data.get('profile_picture'),
-                    bio=serializer.validated_data.get('bio'),
-                    user_type=serializer.validated_data.get('user_type'),
-                    join_date=serializer.validated_data.get('join_date'),
-                    phone_number=serializer.validated_data.get('phone_number'),
-                    language=serializer.validated_data.get('language'),
-                    location=serializer.validated_data.get('location')
-                )
-            return Response(CustomUserSerializer(custom_user).data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # @swagger_auto_schema(
+    #     operation_summary="Create a new custom user",
+    #     request_body=CustomUserSerializer,
+    #     responses={201: CustomUserSerializer, 400: "Invalid data"}
+    # )
+    # def create(self, request):
+    #     serializer = CustomUserSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         with self.unitOfWork:
+    #             user_data = serializer.validated_data.get('user')
+    #             user = User.objects.create(
+    #                 username=user_data.get('username'),
+    #                 email=user_data.get('email'),
+    #                 first_name=user_data.get('first_name'),
+    #                 last_name=user_data.get('last_name')
+    #             )
+    #             custom_user = self.unitOfWork.custom_users.create(
+    #                 user=user,
+    #                 profile_picture=serializer.validated_data.get('profile_picture'),
+    #                 bio=serializer.validated_data.get('bio'),
+    #                 user_type=serializer.validated_data.get('user_type'),
+    #                 join_date=serializer.validated_data.get('join_date'),
+    #                 phone_number=serializer.validated_data.get('phone_number'),
+    #                 language=serializer.validated_data.get('language'),
+    #                 location=serializer.validated_data.get('location')
+    #             )
+    #         return Response(CustomUserSerializer(custom_user).data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         operation_summary="Update an existing custom user",

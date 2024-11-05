@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <style>
+    .form-container {
+        background: #1e1e1e;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    label {
+        color: #ff4081;
+        font-weight: bold;
+    }
+    input[type="text"], input[type="number"], input[type="url"], textarea, select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        background-color: #121212;
+        border: 1px solid #00e5ff;
+        border-radius: 5px;
+        color: #f0f0f0;
+        font-size: 1em;
+    }
+    input[type="text"]:focus, input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focus {
+        border-color: #ff4081;
+        outline: none;
+    }
+    .errorlist {
+        color: #ff4081;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+    .help-text {
+        color: #a0a0a0;
+        font-size: 0.8em;
+    }
+</style>
+  <div class="form-container">
+      <h1>{% if form.instance.pk %}Edit Project{% else %}Add Project{% endif %}</h1>
+      <form method="post">
+          {% csrf_token %}
+          {% for field in form %}
+              <div class="form-group">
+                  <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                  {{ field }}
+                  {% if field.help_text %}
+                      <small class="help-text">{{ field.help_text }}</small>
+                  {% endif %}
+                  {% if field.errors %}
+                      <div class="errorlist">{{ field.errors }}</div>
+                  {% endif %}
+              </div>
+          {% endfor %}
+          <button type="submit" class="button">Save</button>
+      </form>
+  </div>
+{% endblock %}

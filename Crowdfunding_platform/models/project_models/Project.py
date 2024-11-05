@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from Crowdfunding_platform.models.project_models.Category import Category
 
@@ -15,7 +16,7 @@ class Project(models.Model):
     description = models.TextField(max_length=10000)
     goal_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     current_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    start_date = models.DateField()
+    start_date = models.DateField(default=timezone.now)
     end_date = models.DateField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.RESTRICT, related_name='projects')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')

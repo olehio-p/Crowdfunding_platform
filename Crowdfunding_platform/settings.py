@@ -37,7 +37,23 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "Crowdfunding_platform",
+    "drf_yasg",
+    "fapp.apps.FappConfig"
+    # "rest_framework.authtoken",
 ]
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
+    'USE_SESSION_AUTH': False,
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -49,7 +65,27 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "crowdfunding_platform.urls"
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework.authentication.TokenAuthentication',
+#         'rest_framework.authentication.SessionAuthentication',
+#         'rest_framework.authentication.BasicAuthentication',
+#     ],
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ],
+# }
+
+ROOT_URLCONF = "Crowdfunding_platform.urls"
 
 TEMPLATES = [
     {
@@ -67,16 +103,20 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "crowdfunding_platform.wsgi.application"
+WSGI_APPLICATION = "Crowdfunding_platform.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'crowdfunding_platform_db_test',
+        'USER': 'root',
+        'PASSWORD': 'vsepBmx6',
+        'HOST':'localhost',
+        'PORT':'3306',
     }
 }
 

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Advanced Database Performance Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-gradient@0.1.0"></script>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --background-light: #f0f4f8;
+            --text-dark: #2c3e50;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-light);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-dark);
+        }
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            padding: 40px;
+        }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+        }
+        .chart-title {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+        .performance-heatmap {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .performance-heatmap th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            padding: 15px;
+            text-align: center;
+        }
+        .performance-heatmap td {
+            padding: 12px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        .metric-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .metric-selector select {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 2px solid var(--primary-color);
+            background-color: white;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="chart-container">
+            <h2 class="chart-title">Performance by Query Type</h2>
+            <div class="metric-selector">
+                <select id="queryTypeMetricSelector">
+                    <option value="avg_query_time">Average Query Time</option>
+                    <option value="total_time">Total Execution Time</option>
+                    <option value="successful_queries">Successful Queries</option>
+                </select>
+            </div>
+        </div>
+        <div id="batchSizeCharts" class="charts-grid">
+            <!-- Dynamically populated with charts for each batch size -->
+        </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">Worker Count Performance Impact</h2>
+            <div class="metric-selector">
+                <select id="workerMetricSelector">
+                    <option value="avg_query_time">Average Query Time</option>
+                    <option value="total_time">Total Execution Time</option>
+                </select>
+            </div>
+            <canvas id="workerPerformanceChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">Performance Heat Map</h2>
+            <table id="performanceTable" class="performance-heatmap">
+                <thead>
+                    <tr>
+                        <th>Query Type</th>
+                        <th>Workers</th>
+                        <th>Batch Size</th>
+                        <th>Avg Query Time</th>
+                        <th>Total Time</th>
+                        <th>Successful Queries</th>
+                    </tr>
+                </thead>
+                <tbody id="performanceTableBody">
+                    <!-- Dynamically populated -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var testResults = {{ test_results|safe }};
+            var queryTypeMetricSelector = document.getElementById('queryTypeMetricSelector');
+            var workerMetricSelector = document.getElementById('workerMetricSelector');
+            var performanceTableBody = document.getElementById('performanceTableBody');
+            var batchSizeCharts = document.getElementById('batchSizeCharts');
+            var workerChartCtx = document.getElementById('workerPerformanceChart').getContext('2d');
+
+            var workerChart;
+            let charts = new Map(); // Store chart instances
+
+
+            function colorizeHeatmap(value, minVal, maxVal) {
+                const normalizedValue = (value - minVal) / (maxVal - minVal);
+                const hue = (1 - normalizedValue) * 120; // Green to Red spectrum
+                return `hsl(${hue}, 70%, 50%)`;
+            }
+
+            function createHeatMap() {
+                performanceTableBody.innerHTML = '';
+
+                const metrics = ['avg_query_time', 'total_time', 'successful_queries'];
+                const metricMins = metrics.reduce((acc, metric) => {
+                    acc[metric] = Math.min(...testResults.map(r => r[metric]));
+                    return acc;
+                }, {});
+                const metricMaxs = metrics.reduce((acc, metric) => {
+                    acc[metric] = Math.max(...testResults.map(r => r[metric]));
+                    return acc;
+                }, {});
+
+                testResults.forEach(function(result) {
+                    var row = document.createElement('tr');
+
+                    var fields = [
+                        'query_type', 'workers', 'batch_size',
+                        'avg_query_time', 'total_time', 'successful_queries'
+                    ];
+
+                    fields.forEach(function(field, index) {
+                        var cell = document.createElement('td');
+                        cell.textContent = typeof result[field] === 'number'
+                            ? result[field].toFixed(4)
+                            : result[field];
+
+                        if (index > 2 && index < 5) { // Color metrics
+                            cell.style.backgroundColor = colorizeHeatmap(
+                                result[field],
+                                metricMins[field],
+                                metricMaxs[field]
+                            );
+                            cell.style.color = 'white';
+                        }
+
+                        row.appendChild(cell);
+                    });
+
+                    performanceTableBody.appendChild(row);
+                });
+            }
+
+function createBatchSizeCharts(metric) {
+                batchSizeCharts.innerHTML = '';
+                charts.forEach(chart => chart.destroy());
+                charts.clear();
+
+                // Get unique batch sizes and sort them
+                const batchSizes = [...new Set(testResults.map(r => r.batch_size))].sort((a, b) => a - b);
+                const queryTypes = [...new Set(testResults.map(r => r.query_type))];
+                const workerCounts = [...new Set(testResults.map(r => r.workers))].sort((a, b) => a - b);
+
+                // Create a chart for each batch size
+                batchSizes.forEach(batchSize => {
+                    // Create container for this batch size's chart
+                    const chartContainer = document.createElement('div');
+                    chartContainer.className = 'chart-container';
+
+                    const chartTitle = document.createElement('h2');
+                    chartTitle.className = 'chart-title';
+                    chartTitle.textContent = `Batch Size: ${batchSize}`;
+
+                    const canvas = document.createElement('canvas');
+
+                    chartContainer.appendChild(chartTitle);
+                    chartContainer.appendChild(canvas);
+                    batchSizeCharts.appendChild(chartContainer);
+
+                    // Create datasets for this batch size
+                    const datasets = queryTypes.map((type, typeIndex) => {
+                        const dataPoints = workerCounts.map(workerCount => {
+                            const matchingResult = testResults.find(r =>
+                                r.query_type === type &&
+                                r.workers === workerCount &&
+                                r.batch_size === batchSize
+                            );
+                            return matchingResult ? matchingResult[metric] : null;
+                        });
+
+                        return {
+                            label: type,
+                            data: dataPoints,
+                            borderColor: `hsl(${typeIndex * (360 / queryTypes.length)}, 70%, 50%)`,
+                            backgroundColor: `hsla(${typeIndex * (360 / queryTypes.length)}, 70%, 50%, 0.1)`,
+                            tension: 0.3,
+                            fill: false,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        };
+                    });
+
+                    // Create chart for this batch size
+                    const chart = new Chart(canvas.getContext('2d'), {
+                        type: 'line',
+                        data: {
+                            labels: workerCounts.map(count => `${count} Workers`),
+                            datasets: datasets
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: `${metric.replace(/_/g, ' ').toUpperCase()}`,
+                                    font: {
+                                        size: 16,
+                                        weight: 'bold'
+                                    }
+                                },
+                                legend: {
+                                    position: 'top',
+                                    labels: {
+                                        padding: 20,
+                                        usePointStyle: true
+                                    }
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: metric.replace(/_/g, ' ').toUpperCase(),
+                                        font: {
+                                            weight: 'bold'
+                                        }
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Number of Workers',
+                                        font: {
+                                            weight: 'bold'
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    charts.set(batchSize, chart);
+                });
+            }
+
+            function createWorkerImpactChart(metric) {
+                if (workerChart) workerChart.destroy();
+
+                var datasets = testResults
+                    .reduce((acc, result) => {
+                        if (!acc[result.query_type]) {
+                            acc[result.query_type] = [];
+                        }
+                        acc[result.query_type].push({
+                            workers: result.workers,
+                            value: result[metric]
+                        });
+                        return acc;
+                    }, {});
+
+                var chartDatasets = Object.keys(datasets).map((queryType, index) => ({
+                    label: queryType,
+                    data: datasets[queryType],
+                    borderColor: `hsl(${index * 360 / Object.keys(datasets).length}, 70%, 50%)`,
+                    backgroundColor: `hsla(${index * 360 / Object.keys(datasets).length}, 70%, 50%, 0.1)`,
+                    parsing: {
+                        xAxisKey: 'workers',
+                        yAxisKey: 'value'
+                    }
+                }));
+
+                workerChart = new Chart(workerChartCtx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: chartDatasets
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `Worker Count Impact on ${metric.replace('_', ' ').toUpperCase()}`
+                            }
+                        },
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                title: {
+                                    display: true,
+                                    text: 'Number of Workers'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: metric.replace('_', ' ').toUpperCase()
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Initial render
+            createHeatMap();
+            createBatchSizeCharts('avg_query_time');
+            createWorkerImpactChart('avg_query_time');
+
+            // Event listeners
+            queryTypeMetricSelector.addEventListener('change', function(e) {
+                createBatchSizeCharts(e.target.value);
+            });
+
+            workerMetricSelector.addEventListener('change', function(e) {
+                createWorkerImpactChart(e.target.value);
+            });
+        });
+    </script>
+</body>
+</html>

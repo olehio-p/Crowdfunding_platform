@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список курсів</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+        }
+        .messages {
+            margin-bottom: 15px;
+        }
+        .messages p {
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #e9ecef;
+            color: #495057;
+        }
+        .course-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .course-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .course-item:last-child {
+            border-bottom: none;
+        }
+        .course-name {
+            font-weight: bold;
+            color: #343a40;
+        }
+        .course-description {
+            margin: 5px 0;
+            color: #6c757d;
+        }
+        .delete-button {
+            background-color: #dc3545;
+            color: #ffffff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+        .delete-form {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Список курсів</h1>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <ul class="course-list">
+            {% for course in courses %}
+                <li class="course-item">
+                    <div>
+                        <span class="course-name">{{ course.name }}</span>
+                        <p class="course-description">{{ course.description }}</p>
+                    </div>
+                    <form action="{% url 'delete_course' course.id %}" method="post" class="delete-form">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-button">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
